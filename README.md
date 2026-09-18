@@ -226,8 +226,11 @@ Then place that file inside the repository's "images" folder.
 
 ============================================================= -->
 
-![Indexed execution plan](images/execution_plan_indexed.png)
+![Account Indexed execution plan](images/execution_plan_with_account_index.png)
 
+![Queue Indexed execution plan](images/execution_plan_with_queue_index.png)
+
+![Account and Queue Indexed execution plan](images/execution_plan_with_queue+account_index.png)
 ---
 
 ## Performance Results
@@ -330,4 +333,3 @@ CSV outputs + documentation
 
 The final optimization demonstrated that changing the database access path from a table scan to an index seek can reduce the amount of data SQL Server needs to examine when filtering the daily status records.
 
-# Data-Processing-Reporting-Assessment
