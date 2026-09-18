@@ -174,21 +174,6 @@ This means SQL Server had to examine a large portion of the table to identify th
 
 ### Baseline Execution Plan
 
-<!-- ============================================================
-TODO: ADD YOUR SCREENSHOT HERE
-
-1. Take a screenshot of the SQL Server "Execution Plan" tab
-   for the query WITHOUT the optimization index.
-
-2. Save it as:
-   images/execution_plan_baseline.png
-
-3. Put the image inside the repository's "images" folder.
-
-4. The image will automatically appear below this heading on GitHub.
-
-============================================================= -->
-
 ![Baseline execution plan](images/execution_plan_baseline.png)
 
 ---
@@ -212,26 +197,17 @@ instead of scanning the entire `DailyStatus` table.
 
 ### Indexed Execution Plan
 
-<!-- ============================================================
-TODO: ADD YOUR SCREENSHOT HERE
-
-Take a screenshot of the SQL Server "Execution Plan" tab after
-applying the relevant index.
-
-Save it as:
-
-images/execution_plan_indexed.png
-
-Then place that file inside the repository's "images" folder.
-
-============================================================= -->
+Account Indexed execution plan
 
 ![Account Indexed execution plan](images/execution_plan_with_account_index.png)
 
+Queue Indexed execution plan
+
 ![Queue Indexed execution plan](images/execution_plan_with_queue_index.png)
 
-![Account and Queue Indexed execution plan](images/execution_plan_with_queue+account_index.png)
----
+Account and Queue Indexed execution plan
+
+## ![Account and Queue Indexed execution plan](images/execution_plan_with_queue+account_index.png)
 
 ## Performance Results
 
@@ -332,4 +308,3 @@ CSV outputs + documentation
 ```
 
 The final optimization demonstrated that changing the database access path from a table scan to an index seek can reduce the amount of data SQL Server needs to examine when filtering the daily status records.
-
