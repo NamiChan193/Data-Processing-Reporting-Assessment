@@ -1,0 +1,49 @@
+Original query:
+
+SELECT
+    d.account_id,
+    a.name,
+    a.address,
+    d.changed_datetime,
+    d.queue,
+    d.status
+FROM dbo.DailyStatus d
+JOIN dbo.Accounts a
+    ON a.account_id = d.account_id
+WHERE d.queue IN ('COLLECTIONS', 'LEGAL');
+
+
+
+Testing and Results:
+
+The query was executed five times for each configuration. Indexes were then added and removed one at a time to measure their individual impact on query performance.
+
+Configuration	          5 runs (ms)	           Average (ms)
+No index	             331, 208, 122, 158, 130	189.8
+Account index	         126, 130, 140, 133, 137	133.2
+Queue index	             128, 186, 139, 134, 142	145.8
+Queue + Account indexes	 133, 133, 142, 140, 131	135.8
+
+Compared with the baseline:
+
+Account index: 189.8 → 133.2 ms = ~29.8% faster
+Queue index: 189.8 → 145.8 ms = ~23.2% faster
+Queue + Account indexes: 189.8 → 135.8 ms = ~28.5% faster
+
+
+Execution Plan:
+
+The baseline execution plan used a Table Scan on DailyStatus.
+
+After creating the index on DailyStatus.account_id, SQL Server was able to use a Nonclustered Index Seek, reducing the amount of data that needed to be examined.
+
+The execution plan therefore provided additional evidence that the query was being executed more efficiently, beyond the differences observed in the measured execution times.
+
+
+Conclusion:
+
+The performance tests showed that indexing DailyStatus.account_id provided the largest improvement for this workload. The average execution time decreased from 189.8 ms without an index to 133.2 ms, representing an improvement of approximately 29.8%.
+
+The queue index also improved performance compared with the baseline, but the account index performed better in this test. Adding both indexes did not provide a meaningful additional benefit over the account index alone.
+
+Because the dataset is relatively small, individual execution times can be affected by factors such as caching and system overhead. Therefore, the exact timings should not be treated as absolute benchmarks. However, the repeated measurements, together with the change in execution plan from a Table Scan to a Nonclustered Index Seek, support using IX_DailyStatus_Account as the optimization for this query and dataset.

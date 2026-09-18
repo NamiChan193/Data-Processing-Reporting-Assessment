@@ -1,0 +1,66 @@
+LOGICAL STEPS
+
+1. Data inspection and validation
+
+* Inspected the three provided data sources: Accounts, Daily Status, and Monthly Status.
+* Checked column names, data types, date formats, missing values, duplicates, and account consistency.
+* Identified and corrected inconsistent datetime formats before loading the data into the database.
+
+2. Data preparation
+
+* Combined the source files belonging to the Daily Status and Monthly Status datasets.
+* Standardized the data structure and datetime values.
+* Validated that account IDs referenced in status data existed in the Accounts dataset.
+* Prepared clean datasets for database loading.
+
+3. Database creation and loading
+
+* Created three SQL Server tables: Accounts, DailyStatus, and MonthlyStatus.
+* Loaded the cleaned data into SQL Server.
+* Verified row counts and basic data consistency after loading.
+* Used the database as the source for all subsequent processing.
+
+4. Identify active accounts
+
+* Filtered DailyStatus records with a change date on or after 2025-01-01.
+* Identified the accounts that had activity during this period.
+* Selected the most recent update for each account.
+
+5. Add account details
+
+* Joined the activity results with the Accounts table using account_id.
+* Created the final AccountActivity dataset containing:
+  account_id, name, address, latest_update_datetime, queue, status.
+* Exported the result to CSV.
+
+6. Identify COLLECTIONS and LEGAL accounts
+
+* Used the November 2025 MonthlyStatus snapshot to determine which accounts were in COLLECTIONS or LEGAL as of 2025-11-27.
+* Identified 145 qualifying accounts.
+* For each account, searched DailyStatus for its most recent actual queue/status change.
+* Preserved NULL when no corresponding daily update existed.
+* Stored the result in LatestLegalCollections and exported it to CSV.
+
+7. Performance testing
+
+* Created a query joining DailyStatus with Accounts and filtering for COLLECTIONS and LEGAL.
+* Executed the query multiple times without indexes to establish a baseline.
+* Tested an index on DailyStatus.account_id.
+* Tested an index on DailyStatus.queue.
+* Tested both indexes together.
+* Compared average execution times for each configuration.
+
+8. Execution plan analysis
+
+* Compared the SQL Server execution plans before and after indexing.
+* The baseline query used a Table Scan on DailyStatus.
+* After indexing account_id, SQL Server used a Nonclustered Index Seek.
+* Used both execution-plan changes and execution-time measurements to evaluate the improvement.
+
+9. Final outputs
+
+* Account activity CSV.
+* Latest COLLECTIONS/LEGAL CSV.
+* Logical steps documentation.
+* Performance comparison documentation.
+* Execution-plan screenshots documenting the optimization.
